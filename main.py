@@ -37,5 +37,15 @@ def contact() :
   data = { 'bm_img' : 'static/img/contact-bg.jpg', 'txt_heading' : 'Contact Me', 'txt_subheading' : 'Have questions? I have answers.', 'posts' : None }
   return render_template('contact.html', data = data)
 
+@app.route('/form-entry', methods = ['GET','POST'])
+def receive_data() :
+  if request.method == 'POST' :
+    data = {'username' : request.form['username'], 'email' : request.form['email'], 
+            'phone'    : request.form['phone'],    'message' : request.form['message']    
+    }
+    print(data)
+    return '<h1> Successfully sent your message </h1>'
+  else : return render_template('contact.html')
+
 if __name__ == "__main__":
   app.run( debug=True, host='0.0.0.0', port = 2000 )
