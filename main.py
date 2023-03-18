@@ -1,6 +1,8 @@
+import os
 from flask import Flask, render_template, request
 from datetime import datetime
 import requests
+import smtplib
 
 app = Flask(__name__)
 data = {}
@@ -37,15 +39,32 @@ def contact() :
   data = { 'bm_img' : 'static/img/contact-bg.jpg', 'txt_heading' : 'Contact Me', 'txt_subheading' : 'Have questions? I have answers.', 'posts' : None }
   return render_template('contact.html', data = data)
 
+def send_mail(data) :
+  my_email     = "pianoforte618@gmail.com"
+  my_password  = os.environ['mail_pass']
+  mail_subject = 'My Flask Blog Web - New User Contact'
+  mail_body    = data
+  
+  with smtplib.SMTP("smtp.gmail.com") as connection :
+    connection.starttls()
+    connection.login(user = my_email, password = my_password)
+    connection.sendmail(
+      from_addr=my_email, to_addrs=my_email,
+      msg=f'Subject:{mail_subject}\n\n{mail_body}'
+      )
+  return '<h1> Successfully sent your message </h1>'
+  
 @app.route('/form-entry', methods = ['GET','POST'])
 def receive_data() :
   if request.method == 'POST' :
     data = {'username' : request.form['username'], 'email' : request.form['email'], 
             'phone'    : request.form['phone'],    'message' : request.form['message']    
     }
-    print(data)
-    return '<h1> Successfully sent your message </h1>'
+    data_send = ''.join( [ f'{k} : {v}\n' for (k,v) in data.items() ])
+    return send_mail(data_send)
   else : return render_template('contact.html')
 
+
+  
 if __name__ == "__main__":
   app.run( debug=True, host='0.0.0.0', port = 2000 )
