@@ -40,7 +40,7 @@ def contact() :
   return render_template('contact.html', data = data)
 
 def send_mail(data) :
-  my_email     = "pianoforte618@gmail.com"
+  my_email     = os.environ['mail_add']
   my_password  = os.environ['mail_pass']
   mail_subject = 'My Flask Blog Web - New User Contact'
   mail_body    = data
