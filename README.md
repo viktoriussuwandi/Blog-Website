@@ -6,7 +6,7 @@
     * python Flask as Back-End Framework
     * live external API for blog posts
     * Jinja for data transfer with Front-End and Back-End
-    * smtp library to get user's contact
+    * smtp library to email sending of new user registration
     
 ### Project Overview
 
